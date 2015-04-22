@@ -26,7 +26,7 @@ public class MainActivity extends ActionBarActivity {
 
         // nextInt is normally exclusive of the top value,
         // so add 1 to make it inclusive
-        final int randomNum = rand.nextInt((25));
+        final int randomNum = rand.nextInt((25)) + 3;
 
         //Display the number on screen (upper right-hand corner)
         TextView numberText = (TextView)(findViewById(R.id.textView2));
@@ -132,7 +132,7 @@ public class MainActivity extends ActionBarActivity {
             {
                 if (boxArray[x][y].isChecked() && findNumAdjacent(x,y,boxArray) == 0)
                     return 0;
-                else if (boxArray[x][y].isChecked() && findNumAdjacent(x,y,boxArray) == 1 && leaf == 0)
+                else if (boxArray[x][y].isChecked() && findNumAdjacent(x,y,boxArray) == 1)
                     leaf++;
             }
         }
