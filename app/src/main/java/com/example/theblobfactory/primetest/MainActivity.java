@@ -50,6 +50,22 @@ public class MainActivity extends ActionBarActivity {
                 {
                     Toast toast = Toast.makeText(getApplicationContext(), "You checked the correct number of boxes", Toast.LENGTH_SHORT);
                     toast.show();
+                    if (isRect(boxArray) == 1)
+                    {
+                        toast = Toast.makeText(getApplicationContext(), "This is a rectangle! Congratulations!", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                    else if (isRect(boxArray) == 2)
+                    {
+                        toast = Toast.makeText(getApplicationContext(), "This is a not a rectangle! You lose!", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                    else if (isRect(boxArray) == 0)
+                    {
+                        toast = Toast.makeText(getApplicationContext(), "This is a not a valid shape! You lose!", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+
                 }
                 else
                 {
@@ -68,6 +84,22 @@ public class MainActivity extends ActionBarActivity {
                 {
                     Toast toast = Toast.makeText(getApplicationContext(), "You checked the correct number of boxes", Toast.LENGTH_SHORT);
                     toast.show();
+
+                    if (isRect(boxArray) == 2)
+                    {
+                        toast = Toast.makeText(getApplicationContext(), "The number is prime! Good job!", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                    else if (isRect(boxArray) == 1)
+                    {
+                        toast = Toast.makeText(getApplicationContext(), "This number is not prime! You lose!", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                    else if (isRect(boxArray) == 0)
+                    {
+                        toast = Toast.makeText(getApplicationContext(), "This is not a valid shape! You lose!", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
                 }
                 else
                 {
@@ -87,6 +119,48 @@ public class MainActivity extends ActionBarActivity {
             }
         });
     }
+
+    public int isRect(CheckBox[][] boxArray)
+    {
+        int x;
+        int y;
+        int leaf = 0;
+
+        for (x = 0; x < 10; x++)
+        {
+            for(y = 0; y < 10; y++)
+            {
+                if (boxArray[x][y].isChecked() && findNumAdjacent(x,y,boxArray) == 0)
+                    return 0;
+                else if (boxArray[x][y].isChecked() && findNumAdjacent(x,y,boxArray) == 1 && leaf == 0)
+                    leaf++;
+            }
+        }
+
+        if (leaf == 0)
+            return 1;
+        else if (leaf == 1)
+            return 2;
+        else
+            return 0;
+    }
+
+    public int findNumAdjacent(int x, int y, CheckBox[][] boxArray)
+    {
+        int adjacent = 0;
+
+        if (y < 9 && boxArray[x][y + 1].isChecked())
+            adjacent++;
+        if (y > 0 && boxArray[x][y - 1].isChecked())
+            adjacent++;
+        if (x < 9 &&boxArray[x + 1][y].isChecked())
+            adjacent++;
+        if (x > 0 && boxArray[x - 1][y].isChecked())
+            adjacent++;
+
+        return  adjacent;
+    }
+
 
     //Stores the actual checkboxes in the 2d array of checkboxes for easy access
     public void storeBoxes(CheckBox[][] boxArray)
