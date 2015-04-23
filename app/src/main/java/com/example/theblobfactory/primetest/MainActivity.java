@@ -140,13 +140,14 @@ public class MainActivity extends ActionBarActivity {
         });
     }
 
-    public int isRect(CheckBox[][] boxArray)
-    {
+    public int isRect(CheckBox[][] boxArray) {
         int x;
         int y;
         int leaf = 0;
+        boolean foundOne = false;
+        boolean blankAfter = false;
 
-        for (x = 0; x < 10; x++)
+        /*for (x = 0; x < 10; x++)
         {
             for(y = 0; y < 10; y++)
             {
@@ -155,15 +156,60 @@ public class MainActivity extends ActionBarActivity {
                 else if (boxArray[x][y].isChecked() && findNumAdjacent(x,y,boxArray) == 1)
                     leaf++;
             }
+        }*/
+
+        for (x = 0; x < 10; x++) {
+            for (y = 0; y < 10; y++) {
+                if ((boxArray[x][y].isChecked() && findNumAdjacent(x, y, boxArray) == 1) || (!boxArray[x][y].isChecked() && findNumAdjacent(x, y, boxArray) == 2)) {
+                    leaf = 1;
+
+                    if (boxArray[x][y].isChecked()) {
+                        foundOne = true;
+                    }
+                    if (!boxArray[x][y].isChecked() && foundOne) {
+                        blankAfter = true;
+                    }
+                    if (boxArray[x][y].isChecked() && foundOne && blankAfter) {
+                        foundOne = false;
+                        blankAfter = false;
+                        return 0;
+                    }
+                }
+                foundOne = false;
+                blankAfter = false;
+            }
         }
 
-        if (leaf == 0)
-            return 1;
-        else if (leaf == 1)
-            return 2;
-        else
-            return 0;
-    }
+            for (y = 0; y < 10; y++) {
+                for (x = 0; x < 10; x++) {
+                    if ((boxArray[x][y].isChecked() && findNumAdjacent(x, y, boxArray) == 1) || (!boxArray[x][y].isChecked() && findNumAdjacent(x, y, boxArray) == 2)) {
+                        leaf = 1;
+                    }
+                    if (boxArray[x][y].isChecked()) {
+                        foundOne = true;
+                    }
+                    if (!boxArray[x][y].isChecked() && foundOne) {
+                        blankAfter = true;
+                    }
+                    if (boxArray[x][y].isChecked() && foundOne && blankAfter) {
+                        foundOne = false;
+                        blankAfter = false;
+                        return 0;
+                    }
+                }
+                foundOne = false;
+                blankAfter = false;
+            }
+
+
+            if (leaf == 0)
+                return 1;
+            else if (leaf == 1)
+                return 2;
+            else
+                return 0;
+        }
+
 
     public int findNumAdjacent(int x, int y, CheckBox[][] boxArray)
     {
