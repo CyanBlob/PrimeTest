@@ -618,7 +618,9 @@
         android:layout_centerHorizontal="true">
 
         <Button
-            android:layout_width="wrap_content"
+            android:textSize="9dp"
+            android:layout_width="0px"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="Composite"
             android:id="@+id/compositeButton"
@@ -626,19 +628,34 @@
             android:onClick=""/>
 
         <Button
-            android:layout_width="wrap_content"
+            android:textSize="9dp"
+            android:layout_width="0px"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="  Clear  "
+            android:text="Clear"
             android:id="@+id/clearButton"
             android:layout_gravity="bottom" />
+
         <Button
-            android:layout_width="wrap_content"
+            android:textSize="9dp"
+            android:layout_width="0px"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="  Prime  "
+            android:text="Retry"
+            android:id="@+id/retryButton"
+            android:layout_gravity="bottom" />
+
+        <Button
+            android:textSize="9dp"
+            android:layout_width="0px"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Prime"
             android:id="@+id/primeButton"
             android:layout_gravity="bottom" />
 
         <TextView
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"

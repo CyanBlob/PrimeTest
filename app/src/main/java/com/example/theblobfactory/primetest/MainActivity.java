@@ -26,7 +26,7 @@ public class MainActivity extends ActionBarActivity {
 
         // nextInt is normally exclusive of the top value,
         // so add 1 to make it inclusive
-        final int randomNum = rand.nextInt((25)) + 3;
+       final int randomNum = rand.nextInt((25)) + 3;
 
         //Display the number on screen (upper right-hand corner)
         TextView numberText = (TextView)(findViewById(R.id.textView2));
@@ -48,22 +48,27 @@ public class MainActivity extends ActionBarActivity {
                 int x = countBoxes(boxArray);
                 if (x == randomNum)
                 {
-                    Toast toast = Toast.makeText(getApplicationContext(), "You checked the correct number of boxes", Toast.LENGTH_SHORT);
-                    toast.show();
+                    Toast toast;
                     if (isRect(boxArray) == 1)
                     {
                         toast = Toast.makeText(getApplicationContext(), "This is a rectangle! Congratulations!", Toast.LENGTH_SHORT);
                         toast.show();
+                        finish();
+                        startActivity(getIntent());
                     }
                     else if (isRect(boxArray) == 2)
                     {
-                        toast = Toast.makeText(getApplicationContext(), "This is a not a rectangle! You lose!", Toast.LENGTH_SHORT);
+                        toast = Toast.makeText(getApplicationContext(), "This is a not a rectangle! You lose! Try again!", Toast.LENGTH_SHORT);
                         toast.show();
+                        finish();
+                        startActivity(getIntent());
                     }
                     else if (isRect(boxArray) == 0)
                     {
                         toast = Toast.makeText(getApplicationContext(), "This is a not a valid shape! You lose!", Toast.LENGTH_SHORT);
                         toast.show();
+                        finish();
+                        startActivity(getIntent());
                     }
 
                 }
@@ -82,23 +87,28 @@ public class MainActivity extends ActionBarActivity {
                 int x = countBoxes(boxArray);
                 if (x == randomNum)
                 {
-                    Toast toast = Toast.makeText(getApplicationContext(), "You checked the correct number of boxes", Toast.LENGTH_SHORT);
-                    toast.show();
+                    Toast toast;
 
                     if (isRect(boxArray) == 2)
                     {
                         toast = Toast.makeText(getApplicationContext(), "The number is prime! Good job!", Toast.LENGTH_SHORT);
                         toast.show();
+                        finish();
+                        startActivity(getIntent());
                     }
                     else if (isRect(boxArray) == 1)
                     {
                         toast = Toast.makeText(getApplicationContext(), "This number is not prime! You lose!", Toast.LENGTH_SHORT);
                         toast.show();
+                        finish();
+                        startActivity(getIntent());
                     }
                     else if (isRect(boxArray) == 0)
                     {
                         toast = Toast.makeText(getApplicationContext(), "This is not a valid shape! You lose!", Toast.LENGTH_SHORT);
                         toast.show();
+                        finish();
+                        startActivity(getIntent());
                     }
                 }
                 else
@@ -106,6 +116,16 @@ public class MainActivity extends ActionBarActivity {
                     Toast toast = Toast.makeText(getApplicationContext(), "You did not check the correct number of boxes. Try again", Toast.LENGTH_SHORT);
                     toast.show();
                 }
+            }
+        });
+
+        final Button retryButton = (Button) findViewById(R.id.retryButton);
+        retryButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Perform action on click
+                finish();
+                startActivity(getIntent());
+
             }
         });
 
