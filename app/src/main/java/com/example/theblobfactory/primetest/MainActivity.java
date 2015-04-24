@@ -1,5 +1,7 @@
 package com.example.theblobfactory.primetest;
 
+import android.content.Intent;
+import android.os.CountDownTimer;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -15,7 +17,7 @@ import java.util.Random;
 
 public class MainActivity extends ActionBarActivity {
 
-
+    boolean paused = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -23,52 +25,67 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         Random rand = new Random();
-
         // nextInt is normally exclusive of the top value,
         // so add 1 to make it inclusive
-       final int randomNum = rand.nextInt((25)) + 3;
+       final int randomNum = rand.nextInt((25)) + 4;
+
 
         //Display the number on screen (upper right-hand corner)
         TextView numberText = (TextView)(findViewById(R.id.textView2));
         numberText.setText(Integer.toString(randomNum));
 
         //Create an array to hold our checkboxes, then store the boxes in the array
-        final CheckBox[][] boxArray = new CheckBox[10][10];
+        final CheckBox[][] boxArray = new CheckBox[13][10];
         storeBoxes(boxArray);
 
+        final TextView timer = (TextView) findViewById(R.id.timer);
 
+        final CountDownTimer count = new CountDownTimer(30000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                if (paused)
+                    cancel();
+                timer.setText("    " + millisUntilFinished / 1000);
+            }
 
-
+            public void onFinish() {
+                timer.setText("    0");
+                Toast toast = Toast.makeText(getApplicationContext(), "You ran out of time!", Toast.LENGTH_SHORT);
+                toast.show();
+                finish();
+                startActivity(getIntent());
+            }
+        }.start();
 
         final Button compositeButton = (Button) findViewById(R.id.compositeButton);
         compositeButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
                 // Perform action on click
+
                 int x = countBoxes(boxArray);
                 if (x == randomNum)
                 {
                     Toast toast;
                     if (isRect(boxArray) == 1)
                     {
-                        toast = Toast.makeText(getApplicationContext(), "This is a rectangle! Congratulations!", Toast.LENGTH_SHORT);
+                        toast = Toast.makeText(getApplicationContext(), "This is a composite number! Congratulations!", Toast.LENGTH_SHORT);
                         toast.show();
                         finish();
+                        count.cancel();
                         startActivity(getIntent());
                     }
                     else if (isRect(boxArray) == 2)
                     {
-                        toast = Toast.makeText(getApplicationContext(), "This is a not a rectangle! You lose! Try again!", Toast.LENGTH_SHORT);
+                        toast = Toast.makeText(getApplicationContext(), "This is not a composite number! You lose!", Toast.LENGTH_SHORT);
                         toast.show();
                         finish();
+                        count.cancel();
                         startActivity(getIntent());
                     }
                     else if (isRect(boxArray) == 0)
                     {
-                        toast = Toast.makeText(getApplicationContext(), "This is a not a valid shape! You lose!", Toast.LENGTH_SHORT);
+                        toast = Toast.makeText(getApplicationContext(), "This is a not a valid shape! Try again!", Toast.LENGTH_SHORT);
                         toast.show();
-                        finish();
-                        startActivity(getIntent());
                     }
 
                 }
@@ -91,24 +108,25 @@ public class MainActivity extends ActionBarActivity {
 
                     if (isRect(boxArray) == 2)
                     {
-                        toast = Toast.makeText(getApplicationContext(), "The number is prime! Good job!", Toast.LENGTH_SHORT);
+                        toast = Toast.makeText(getApplicationContext(), "This is a prime number! Good job!", Toast.LENGTH_SHORT);
                         toast.show();
                         finish();
+                        count.cancel();
                         startActivity(getIntent());
+
                     }
                     else if (isRect(boxArray) == 1)
                     {
-                        toast = Toast.makeText(getApplicationContext(), "This number is not prime! You lose!", Toast.LENGTH_SHORT);
+                        toast = Toast.makeText(getApplicationContext(), "This is not a prime number! You lose!", Toast.LENGTH_SHORT);
                         toast.show();
                         finish();
+                        count.cancel();
                         startActivity(getIntent());
                     }
                     else if (isRect(boxArray) == 0)
                     {
-                        toast = Toast.makeText(getApplicationContext(), "This is not a valid shape! You lose!", Toast.LENGTH_SHORT);
+                        toast = Toast.makeText(getApplicationContext(), "This is not a valid shape! Try again!", Toast.LENGTH_SHORT);
                         toast.show();
-                        finish();
-                        startActivity(getIntent());
                     }
                 }
                 else
@@ -124,6 +142,7 @@ public class MainActivity extends ActionBarActivity {
             public void onClick(View v) {
                 // Perform action on click
                 finish();
+                count.cancel();
                 startActivity(getIntent());
 
             }
@@ -158,10 +177,10 @@ public class MainActivity extends ActionBarActivity {
             }
         }*/
 
-        for (x = 0; x < 10; x++) {
+        for (x = 0; x < 13; x++) {
             for (y = 0; y < 10; y++) {
                 if ((boxArray[x][y].isChecked() && findNumAdjacent(x, y, boxArray) == 1) || (!boxArray[x][y].isChecked() && findNumAdjacent(x, y, boxArray) == 2)) {
-                    leaf = 1;
+                    leaf++;
 
                     if (boxArray[x][y].isChecked()) {
                         foundOne = true;
@@ -170,8 +189,7 @@ public class MainActivity extends ActionBarActivity {
                         blankAfter = true;
                     }
                     if (boxArray[x][y].isChecked() && foundOne && blankAfter) {
-                        foundOne = false;
-                        blankAfter = false;
+
                         return 0;
                     }
                 }
@@ -180,27 +198,25 @@ public class MainActivity extends ActionBarActivity {
             }
         }
 
-            for (y = 0; y < 10; y++) {
-                for (x = 0; x < 10; x++) {
-                    if ((boxArray[x][y].isChecked() && findNumAdjacent(x, y, boxArray) == 1) || (!boxArray[x][y].isChecked() && findNumAdjacent(x, y, boxArray) == 2)) {
-                        leaf = 1;
-                    }
-                    if (boxArray[x][y].isChecked()) {
-                        foundOne = true;
-                    }
-                    if (!boxArray[x][y].isChecked() && foundOne) {
-                        blankAfter = true;
-                    }
-                    if (boxArray[x][y].isChecked() && foundOne && blankAfter) {
-                        foundOne = false;
-                        blankAfter = false;
-                        return 0;
-                    }
-                }
-                foundOne = false;
-                blankAfter = false;
-            }
+        for (y = 0; y < 10; y++) {
+            for (x = 0; x < 13; x++) {
+                //if ((boxArray[x][y].isChecked() && findNumAdjacent(x, y, boxArray) == 1) || (!boxArray[x][y].isChecked() && findNumAdjacent(x, y, boxArray) == 2)) {
+                //    leaf ++;
 
+                if (boxArray[x][y].isChecked()) {
+                    foundOne = true;
+                }
+                if (!boxArray[x][y].isChecked() && foundOne) {
+                    blankAfter = true;
+                }
+                if (boxArray[x][y].isChecked() && foundOne && blankAfter) {
+
+                    return 0;
+                }
+            }
+        foundOne = false;
+        blankAfter = false;
+        }
 
             if (leaf == 0)
                 return 1;
@@ -208,7 +224,7 @@ public class MainActivity extends ActionBarActivity {
                 return 2;
             else
                 return 0;
-        }
+    }
 
 
     public int findNumAdjacent(int x, int y, CheckBox[][] boxArray)
@@ -219,7 +235,7 @@ public class MainActivity extends ActionBarActivity {
             adjacent++;
         if (y > 0 && boxArray[x][y - 1].isChecked())
             adjacent++;
-        if (x < 9 &&boxArray[x + 1][y].isChecked())
+        if (x < 12 &&boxArray[x + 1][y].isChecked())
             adjacent++;
         if (x > 0 && boxArray[x - 1][y].isChecked())
             adjacent++;
@@ -341,6 +357,40 @@ public class MainActivity extends ActionBarActivity {
         boxArray[9][8] = (CheckBox)(findViewById(R.id.checkBox98));
         boxArray[9][9] = (CheckBox)(findViewById(R.id.checkBox99));
 
+        boxArray[10][0] = (CheckBox)(findViewById(R.id.checkBox100));
+        boxArray[10][1] = (CheckBox)(findViewById(R.id.checkBox101));
+        boxArray[10][2] = (CheckBox)(findViewById(R.id.checkBox102));
+        boxArray[10][3] = (CheckBox)(findViewById(R.id.checkBox103));
+        boxArray[10][4] = (CheckBox)(findViewById(R.id.checkBox104));
+        boxArray[10][5] = (CheckBox)(findViewById(R.id.checkBox105));
+        boxArray[10][6] = (CheckBox)(findViewById(R.id.checkBox106));
+        boxArray[10][7] = (CheckBox)(findViewById(R.id.checkBox107));
+        boxArray[10][8] = (CheckBox)(findViewById(R.id.checkBox108));
+        boxArray[10][9] = (CheckBox)(findViewById(R.id.checkBox109));
+
+        boxArray[11][0] = (CheckBox)(findViewById(R.id.checkBox110));
+        boxArray[11][1] = (CheckBox)(findViewById(R.id.checkBox111));
+        boxArray[11][2] = (CheckBox)(findViewById(R.id.checkBox112));
+        boxArray[11][3] = (CheckBox)(findViewById(R.id.checkBox113));
+        boxArray[11][4] = (CheckBox)(findViewById(R.id.checkBox114));
+        boxArray[11][5] = (CheckBox)(findViewById(R.id.checkBox115));
+        boxArray[11][6] = (CheckBox)(findViewById(R.id.checkBox116));
+        boxArray[11][7] = (CheckBox)(findViewById(R.id.checkBox117));
+        boxArray[11][8] = (CheckBox)(findViewById(R.id.checkBox118));
+        boxArray[11][9] = (CheckBox)(findViewById(R.id.checkBox119));
+
+        boxArray[12][0] = (CheckBox)(findViewById(R.id.checkBox120));
+        boxArray[12][1] = (CheckBox)(findViewById(R.id.checkBox121));
+        boxArray[12][2] = (CheckBox)(findViewById(R.id.checkBox122));
+        boxArray[12][3] = (CheckBox)(findViewById(R.id.checkBox123));
+        boxArray[12][4] = (CheckBox)(findViewById(R.id.checkBox124));
+        boxArray[12][5] = (CheckBox)(findViewById(R.id.checkBox125));
+        boxArray[12][6] = (CheckBox)(findViewById(R.id.checkBox126));
+        boxArray[12][7] = (CheckBox)(findViewById(R.id.checkBox127));
+        boxArray[12][8] = (CheckBox)(findViewById(R.id.checkBox128));
+        boxArray[12][9] = (CheckBox)(findViewById(R.id.checkBox129));
+
+
     }
 
     //Unchecks all the checkboxes
@@ -363,7 +413,7 @@ public class MainActivity extends ActionBarActivity {
         int y;
         int checkedBoxes = 0;
 
-        for (x = 0; x < 10; x++)
+        for (x = 0; x < 13; x++)
         {
             for (y = 0; y < 10; y++)
             {
@@ -373,6 +423,14 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return checkedBoxes;
+    }
+
+
+    protected void onPause()
+    {
+        super.onPause();
+        finish();
+        paused = true;
     }
 
 
