@@ -84,7 +84,7 @@ public class MainActivity extends ActionBarActivity {
                     }
                     else if (isRect(boxArray) == 0)
                     {
-                        toast = Toast.makeText(getApplicationContext(), "This is a not a valid shape! Try again!", Toast.LENGTH_SHORT);
+                        toast = Toast.makeText(getApplicationContext(), "This is not a valid shape! Try again!", Toast.LENGTH_SHORT);
                         toast.show();
                     }
 
@@ -165,6 +165,7 @@ public class MainActivity extends ActionBarActivity {
         int leaf = 0;
         boolean foundOne = false;
         boolean blankAfter = false;
+        int leafLocation[][] = new int[1][1];
 
         /*for (x = 0; x < 10; x++)
         {
@@ -181,6 +182,9 @@ public class MainActivity extends ActionBarActivity {
             for (y = 0; y < 10; y++) {
                 if ((boxArray[x][y].isChecked() && findNumAdjacent(x, y, boxArray) == 1) || (!boxArray[x][y].isChecked() && findNumAdjacent(x, y, boxArray) == 2)) {
                     leaf++;
+                    if((x != 0 && findNumAdjacent(x-1,y,boxArray) == 1 &&  boxArray[x-1][y].isChecked()) || (x != 12 && findNumAdjacent(x+1,y,boxArray) == 1  && boxArray[x+1][y].isChecked()) || (y != 0 && findNumAdjacent(x,y-1,boxArray) == 1  && boxArray[x][y-1].isChecked()) || (y != 9 &&findNumAdjacent(x,y+1,boxArray) == 1 && boxArray[x][y+1].isChecked()))
+                        leaf--;
+                }
 
                     if (boxArray[x][y].isChecked()) {
                         foundOne = true;
@@ -196,12 +200,10 @@ public class MainActivity extends ActionBarActivity {
                 foundOne = false;
                 blankAfter = false;
             }
-        }
+
 
         for (y = 0; y < 10; y++) {
             for (x = 0; x < 13; x++) {
-                //if ((boxArray[x][y].isChecked() && findNumAdjacent(x, y, boxArray) == 1) || (!boxArray[x][y].isChecked() && findNumAdjacent(x, y, boxArray) == 2)) {
-                //    leaf ++;
 
                 if (boxArray[x][y].isChecked()) {
                     foundOne = true;
@@ -220,7 +222,7 @@ public class MainActivity extends ActionBarActivity {
 
             if (leaf == 0)
                 return 1;
-            else if (leaf == 1)
+            if (leaf == 1)
                 return 2;
             else
                 return 0;
@@ -429,6 +431,13 @@ public class MainActivity extends ActionBarActivity {
     protected void onPause()
     {
         super.onPause();
+        finish();
+        paused = true;
+    }
+
+    protected void onStop()
+    {
+        super.onStop();
         finish();
         paused = true;
     }
