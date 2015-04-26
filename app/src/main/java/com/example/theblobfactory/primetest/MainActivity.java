@@ -163,6 +163,7 @@ public class MainActivity extends ActionBarActivity {
         int x;
         int y;
         int leaf = 0;
+        int bite = 0; //A bite is an empty checkbox adjacent to 2 checked checkboxes
         boolean foundOne = false;
         boolean blankAfter = false;
         int leafLocation[][] = new int[1][1];
@@ -180,7 +181,11 @@ public class MainActivity extends ActionBarActivity {
 
         for (x = 0; x < 13; x++) {
             for (y = 0; y < 10; y++) {
-                if ((boxArray[x][y].isChecked() && findNumAdjacent(x, y, boxArray) == 1) || (!boxArray[x][y].isChecked() && findNumAdjacent(x, y, boxArray) == 2)) {
+                if ((!boxArray[x][y].isChecked() && findNumAdjacent(x, y, boxArray) == 2))
+                {
+                    bite++;
+                }
+                if ((boxArray[x][y].isChecked() && findNumAdjacent(x, y, boxArray) == 1)) {
                     leaf++;
                     if((x != 0 && findNumAdjacent(x-1,y,boxArray) == 1 &&  boxArray[x-1][y].isChecked()) || (x != 12 && findNumAdjacent(x+1,y,boxArray) == 1  && boxArray[x+1][y].isChecked()) || (y != 0 && findNumAdjacent(x,y-1,boxArray) == 1  && boxArray[x][y-1].isChecked()) || (y != 9 &&findNumAdjacent(x,y+1,boxArray) == 1 && boxArray[x][y+1].isChecked()))
                         leaf--;
@@ -220,9 +225,9 @@ public class MainActivity extends ActionBarActivity {
         blankAfter = false;
         }
 
-            if (leaf == 0)
+            if (leaf == 0 && bite == 0)
                 return 1;
-            if (leaf == 1)
+            if (leaf == 1 && bite <= 1)
                 return 2;
             else
                 return 0;
