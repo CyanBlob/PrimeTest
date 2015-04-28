@@ -25,8 +25,8 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         Random rand = new Random();
-        // nextInt is normally exclusive of the top value,
-        // so add 1 to make it inclusive
+
+       //Create a random number
        final int randomNum = rand.nextInt((25)) + 4;
 
 
@@ -40,14 +40,15 @@ public class MainActivity extends ActionBarActivity {
 
         final TextView timer = (TextView) findViewById(R.id.timer);
 
+        //Starts the countdown
         final CountDownTimer count = new CountDownTimer(30000, 1000) {
             public void onTick(long millisUntilFinished) {
-                if (paused)
+                if (paused) //Stop the timer if the app is taken out of focus
                     cancel();
                 timer.setText("    " + millisUntilFinished / 1000);
             }
 
-            public void onFinish() {
+            public void onFinish() {  //If the timer reaches 0, the player loses
                 timer.setText("    0");
                 Toast toast = Toast.makeText(getApplicationContext(), "You ran out of time!", Toast.LENGTH_SHORT);
                 toast.show();
@@ -56,12 +57,12 @@ public class MainActivity extends ActionBarActivity {
             }
         }.start();
 
+        //Check the shape of the box the user made when the user presses a button, and check if the
+        //shape is allowed for the button pressed.
         final Button compositeButton = (Button) findViewById(R.id.compositeButton);
         compositeButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                // Perform action on click
-
                 int x = countBoxes(boxArray);
                 if (x == randomNum)
                 {
@@ -100,7 +101,6 @@ public class MainActivity extends ActionBarActivity {
         final Button primeButton = (Button) findViewById(R.id.primeButton);
         primeButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // Perform action on click
                 int x = countBoxes(boxArray);
                 if (x == randomNum)
                 {
@@ -140,7 +140,6 @@ public class MainActivity extends ActionBarActivity {
         final Button retryButton = (Button) findViewById(R.id.retryButton);
         retryButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // Perform action on click
                 finish();
                 count.cancel();
                 startActivity(getIntent());
@@ -151,33 +150,23 @@ public class MainActivity extends ActionBarActivity {
         final Button clearButton = (Button) findViewById(R.id.clearButton);
         clearButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // Perform action on click
                 clearBoxes(boxArray);
-                //Toast toast = Toast.makeText(getApplicationContext(), "Clear Button Pressed", Toast.LENGTH_SHORT);
-                //toast.show();
+
             }
         });
     }
 
+    //Returns the "shape" of the object
+    //0 = not a valid shape
+    //1 = rectangle
+    //2 = "prime" rectangle
     public int isRect(CheckBox[][] boxArray) {
         int x;
         int y;
-        int leaf = 0;
+        int leaf = 0; //A leaf is a checked checkbox adacent to 1 checked checkbox
         int bite = 0; //A bite is an empty checkbox adjacent to 2 checked checkboxes
         boolean foundOne = false;
         boolean blankAfter = false;
-        int leafLocation[][] = new int[1][1];
-
-        /*for (x = 0; x < 10; x++)
-        {
-            for(y = 0; y < 10; y++)
-            {
-                if (boxArray[x][y].isChecked() && findNumAdjacent(x,y,boxArray) == 0)
-                    return 0;
-                else if (boxArray[x][y].isChecked() && findNumAdjacent(x,y,boxArray) == 1)
-                    leaf++;
-            }
-        }*/
 
         for (x = 0; x < 13; x++) {
             for (y = 0; y < 10; y++) {
@@ -234,6 +223,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
+    //Returns the number of checked boxes that a box is adjacent to
     public int findNumAdjacent(int x, int y, CheckBox[][] boxArray)
     {
         int adjacent = 0;
@@ -432,7 +422,6 @@ public class MainActivity extends ActionBarActivity {
         return checkedBoxes;
     }
 
-
     protected void onPause()
     {
         super.onPause();
@@ -446,28 +435,5 @@ public class MainActivity extends ActionBarActivity {
         finish();
         paused = true;
     }
-
-
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }*/
 }
 
